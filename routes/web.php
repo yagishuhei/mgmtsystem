@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 */
 Auth::routes();
 
-Route::get('/{any}', function () {
-    return view('home');
-})->where('any', '.*');
+//vue-routerの設定に必要な処理（/apiのURLを除く）
+Route::get('/{any}', [App\Http\Controllers\HomeController::class, 'index'])
+->name('home')->where('any', '^((?!api).)*');

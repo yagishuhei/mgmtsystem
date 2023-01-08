@@ -9,11 +9,21 @@ require('./bootstrap');
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-
-import router from './router';
+import About from './components/About.vue';
 
 window.Vue = require('vue').default;
 Vue.use(VueRouter);
+
+const router = new VueRouter ({
+    mode: 'history',
+    routes: [
+        {
+            path: '/about',
+            name: 'about',
+            component: About,
+        }
+    ]
+});
 
 /**
  * The following block of code may be used to automatically register your
