@@ -66,8 +66,8 @@ return [
     | ahead and set this to a sensible default for you out of the box.
     |
     */
-
-    'timezone' => 'UTC',
+    //修正
+    'timezone' => 'Asia/Tokyo',
 
     /*
     |--------------------------------------------------------------------------
@@ -79,8 +79,8 @@ return [
     | to any of the locales which will be supported by the application.
     |
     */
-
-    'locale' => 'en',
+    //修正
+    'locale' => 'ja',
 
     /*
     |--------------------------------------------------------------------------
@@ -105,8 +105,8 @@ return [
     | localized telephone numbers, street address information and more.
     |
     */
-
-    'faker_locale' => 'en_US',
+    //修正
+    'faker_locale' => 'ja_JP',
 
     /*
     |--------------------------------------------------------------------------
