@@ -2,9 +2,6 @@
 
 @section('content')
 <div class="container">
-<div id="app">
-            <example-component />
-        </div>
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
