@@ -23,7 +23,7 @@ class UserTableSeeder extends Seeder
         print "パスワードは".$password."です"."\n";
         DB::table('users')->insert([
             'name' => '管理者',
-            'email' => 'Initial@email.com',
+            'email' => 'Admin@email.com',
             'password' => Hash::make($password),
         ]);
     }
