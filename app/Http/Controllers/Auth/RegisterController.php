@@ -8,10 +8,12 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-
+//登録内容変更、リセットパスワードリンク送付
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Password;
-
+//登録後管理者のままで元の画面にリダイレクト
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -55,7 +57,13 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                'unique:users',
+            ],
         ]);
     }
 
@@ -77,5 +85,12 @@ class RegisterController extends Controller
         $credentials['email'] = $data['email'];
         Password::sendResetLink($credentials);
         return $user;
+    }
+    //registerメソッドをオーバーライド
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+        event(new Registered(($user = $this->create($request->all()))));
+        return $this->registered($request, $user) ?: redirect('/register');
     }
 }
