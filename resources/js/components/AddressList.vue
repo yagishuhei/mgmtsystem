@@ -1,9 +1,10 @@
 <template>
     <div class="container">
+        <Modal v-show="showModal" v-on:from-child="closeModal">iiiiiiii</Modal>
         <div class="card">
             <h1>AddressList</h1>
             <div>
-                <button class="btn btn-primary">追加</button>
+                <button @click="openModal" class="btn btn-primary">追加</button>
             </div>
             <table>
                 <thead>
@@ -35,7 +36,9 @@
                         <td>{{ address.created_at }}</td>
                         <td>{{ address.updated_at }}</td>
                         <td>
-                            <button class="btn btn-success">Edit</button>
+                            <button class="btn btn-success" @click="openModal">
+                                Edit
+                            </button>
                         </td>
                         <td>
                             <button class="btn btn-danger">Delete</button>
@@ -47,10 +50,16 @@
     </div>
 </template>
 <script>
+import Modal from './Modal.vue';
 export default {
+    components: {
+        Modal,
+    },
     data: function () {
         return {
             addresses: [],
+            //modal
+            showModal: false,
         };
     },
     methods: {
@@ -59,10 +68,16 @@ export default {
                 this.addresses = res.data;
             });
         },
+        //ModalMethods
+        openModal() {
+            this.showModal = true;
+        },
+        closeModal() {
+            this.showModal = false;
+        },
     },
     mounted() {
         this.getAddress();
     },
 };
 </script>
-
