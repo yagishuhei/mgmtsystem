@@ -1,7 +1,10 @@
 <template>
     <div class="container">
         <div class="card">
-            <h1>住所リスト</h1>
+            <h1>AddressList</h1>
+            <div>
+                <button class="btn btn-primary">追加</button>
+            </div>
             <table>
                 <thead>
                     <tr>
@@ -31,6 +34,12 @@
                         <td>{{ address.status }}</td>
                         <td>{{ address.created_at }}</td>
                         <td>{{ address.updated_at }}</td>
+                        <td>
+                            <button class="btn btn-success">Edit</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger">Delete</button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -56,3 +65,4 @@ export default {
     },
 };
 </script>
+
