@@ -10,6 +10,7 @@ require('./bootstrap');
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import About from './components/About.vue';
+import AddressList from './components/AddressList.vue'
 
 window.Vue = require('vue').default;
 Vue.use(VueRouter);
@@ -21,6 +22,11 @@ const router = new VueRouter ({
             path: '/about',
             name: 'about',
             component: About,
+        },
+        {
+            path: '/addresses',
+            name: 'address.list',
+            component: AddressList,
         }
     ]
 });
