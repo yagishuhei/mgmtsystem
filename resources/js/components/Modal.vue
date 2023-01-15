@@ -1,61 +1,67 @@
 <template>
-    <div id="overlay" @click="clickEvent">
-        <div id="modal" @click="stopEvent">
-            <p>モーダル</p>
-            <p>{{ message }}</p>
-            <form v-on:submit.prevent="addFormData(address)">
-                <p>{{ address.id }}</p>
-                <label>address</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    v-model="address.address"
-                />
-                <label>ip</label>
-                <input type="text" class="form-control" v-model="address.ip" />
-                <label>customer</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    v-model="address.customer"
-                />
-                <label>dm_id</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    v-model="address.dm_id"
-                />
-                <label>place</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    v-model="address.place"
-                />
-                <label>purpose</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    v-model="address.purpose"
-                />
-                <label>memo</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    v-model="address.memo"
-                />
-                <label>staus</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    v-model="address.status"
-                />
-                <button type="submit" class="btn btn-sm btn-success">
-                    Click
-                </button>
-            </form>
-            <p @click="clickEvent">X</p>
+    <transition name="fade" appear>
+        <div id="overlay" @click="clickEvent">
+            <div id="modal" @click="stopEvent">
+                <p>モーダル</p>
+                <p>{{ message }}</p>
+                <form v-on:submit.prevent="addFormData(address)">
+                    <p>{{ address.id }}</p>
+                    <label>address</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        v-model="address.address"
+                    />
+                    <label>ip</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        v-model="address.ip"
+                    />
+                    <label>customer</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        v-model="address.customer"
+                    />
+                    <label>dm_id</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        v-model="address.dm_id"
+                    />
+                    <label>place</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        v-model="address.place"
+                    />
+                    <label>purpose</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        v-model="address.purpose"
+                    />
+                    <label>memo</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        v-model="address.memo"
+                    />
+                    <label>staus</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        v-model="address.status"
+                    />
+                    <button type="submit" class="btn btn-sm btn-success">
+                        Click
+                    </button>
+                </form>
+                <p @click="clickEvent">X</p>
+            </div>
         </div>
-    </div>
+    </transition>
 </template>
 <script>
 export default {
@@ -116,5 +122,26 @@ export default {
     width: 50%;
     padding: 1em;
     background: #fff;
+}
+/*表示時*/
+.fade-enter-from {
+    opacity: 0;
+}
+/*表示のアクティブ状態*/
+.fade-enter-active,
+.fade-leave-active {
+    transition: all 0.5s;
+}
+/*表示終了時*/
+.fade-enter-to {
+    opacity: 1;
+}
+/*非表示時*/
+.fade-leave-from {
+    opacity: 1;
+}
+/*非表示の終了時*/
+.fade-leave-to {
+    opacity: 0;
 }
 </style>
