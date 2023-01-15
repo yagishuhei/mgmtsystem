@@ -44,7 +44,7 @@
                         <td>
                             <button
                                 class="btn btn-success"
-                                @click="openModal(address)"
+                                @click="openModal(address, showModal)"
                             >
                                 Edit
                             </button>
@@ -80,14 +80,15 @@ export default {
         },
         //ModalMethods
         openModal(address) {
-            this.showModal = true;
             this.address = address;
+            this.showModal = true;
         },
         closeModal() {
             this.showModal = false;
         },
         updatePage() {
             this.getAddresses();
+            this.showModal = false;
         },
     },
     mounted() {
@@ -95,3 +96,29 @@ export default {
     },
 };
 </script>
+<style>
+/*表示時*/
+.fade-enter-from {
+    opacity: 0;
+}
+/*表示のアクティブ状態*/
+.fade-enter-active {
+    transition: all 0.5s;
+}
+/*表示終了時*/
+.fade-enter-to {
+    opacity: 1;
+}
+/*非表示時*/
+.fade-leave-from {
+    opacity: 1;
+}
+/*非表示のアクティブ状態*/
+.fade-leave-active {
+    transition: all 0.5s;
+}
+/*非表示の終了時*/
+.fade-leave-to {
+    opacity: 0;
+}
+</style>
