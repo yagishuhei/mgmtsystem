@@ -1,6 +1,11 @@
 <template>
     <div class="container">
-        <Modal v-show="showModal" v-on:from-child="closeModal">iiiiiiii</Modal>
+        <Modal
+            :address="address"
+            v-show="showModal"
+            v-on:from-child="closeModal"
+            v-on:update-address="updatePage"
+        ></Modal>
         <div class="card">
             <h1>AddressList</h1>
             <div>
@@ -35,8 +40,12 @@
                         <td>{{ address.status }}</td>
                         <td>{{ address.created_at }}</td>
                         <td>{{ address.updated_at }}</td>
+                        <!--引数を渡す-->
                         <td>
-                            <button class="btn btn-success" @click="openModal">
+                            <button
+                                class="btn btn-success"
+                                @click="openModal(address)"
+                            >
                                 Edit
                             </button>
                         </td>
@@ -60,24 +69,29 @@ export default {
             addresses: [],
             //modal
             showModal: false,
+            address: '',
         };
     },
     methods: {
-        getAddress() {
+        getAddresses() {
             axios.get('/api/addresses').then((res) => {
                 this.addresses = res.data;
             });
         },
         //ModalMethods
-        openModal() {
+        openModal(address) {
             this.showModal = true;
+            this.address = address;
         },
         closeModal() {
             this.showModal = false;
         },
+        updatePage() {
+            this.getAddresses();
+        },
     },
     mounted() {
-        this.getAddress();
+        this.getAddresses();
     },
 };
 </script>

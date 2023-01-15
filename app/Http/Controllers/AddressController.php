@@ -11,4 +11,17 @@ class AddressController extends Controller
     {
         return Address::all();
     }
+    public function store(Request $request)
+    {
+        return Address::create($request->all());
+    }
+    public function show(Address $address)
+    {
+        return $address;
+    }
+    public function update(Request $request, Address $address)
+    {
+        $address->update($request->all());
+        return $address;
+    }
 }

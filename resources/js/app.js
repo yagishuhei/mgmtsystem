@@ -12,7 +12,7 @@ const router = new VueRouter ({
     mode: 'history',
     routes: [
         {
-            path: '/',
+            path: '/addresses',
             name: 'address.list',
             component: AddressList,
         }
