@@ -22,3 +22,15 @@ Route::get('/addresses', [
     App\Http\Controllers\AddressController::class,
     'index',
 ]);
+Route::post('/addresses', [
+    App\Http\Controllers\AddressController::class,
+    'store',
+]);
+Route::get('/addresses/{address}', [
+    App\Http\Controllers\AddressController::class,
+    'show',
+]);
+Route::put('/addresses/{address}', [
+    App\Http\Controllers\AddressController::class,
+    'update',
+]);

@@ -1,9 +1,15 @@
 <template>
     <div class="container">
+        <Modal
+            :address="address"
+            v-show="showModal"
+            v-on:from-child="closeModal"
+            v-on:update-address="updatePage"
+        ></Modal>
         <div class="card">
             <h1>AddressList</h1>
             <div>
-                <button class="btn btn-primary">追加</button>
+                <button @click="openModal" class="btn btn-primary">追加</button>
             </div>
             <table>
                 <thead>
@@ -34,8 +40,14 @@
                         <td>{{ address.status }}</td>
                         <td>{{ address.created_at }}</td>
                         <td>{{ address.updated_at }}</td>
+                        <!--引数を渡す-->
                         <td>
-                            <button class="btn btn-success">Edit</button>
+                            <button
+                                class="btn btn-success"
+                                @click="openModal(address)"
+                            >
+                                Edit
+                            </button>
                         </td>
                         <td>
                             <button class="btn btn-danger">Delete</button>
@@ -47,22 +59,39 @@
     </div>
 </template>
 <script>
+import Modal from './Modal.vue';
 export default {
+    components: {
+        Modal,
+    },
     data: function () {
         return {
             addresses: [],
+            //modal
+            showModal: false,
+            address: '',
         };
     },
     methods: {
-        getAddress() {
+        getAddresses() {
             axios.get('/api/addresses').then((res) => {
                 this.addresses = res.data;
             });
         },
+        //ModalMethods
+        openModal(address) {
+            this.showModal = true;
+            this.address = address;
+        },
+        closeModal() {
+            this.showModal = false;
+        },
+        updatePage() {
+            this.getAddresses();
+        },
     },
     mounted() {
-        this.getAddress();
+        this.getAddresses();
     },
 };
 </script>
-
