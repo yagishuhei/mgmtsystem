@@ -34,3 +34,7 @@ Route::put('/addresses/{address}', [
     App\Http\Controllers\AddressController::class,
     'update',
 ]);
+Route::delete('/addresses/{address}', [
+    App\Http\Controllers\AddressController::class,
+    'destroy',
+]);
