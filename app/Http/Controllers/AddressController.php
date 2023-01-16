@@ -24,4 +24,9 @@ class AddressController extends Controller
         $address->update($request->all());
         return $address;
     }
+    public function destroy(Address $address)
+    {
+        $address->delete();
+        return $address;
+    }
 }

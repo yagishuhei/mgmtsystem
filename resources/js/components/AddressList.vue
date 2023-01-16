@@ -50,7 +50,12 @@
                             </button>
                         </td>
                         <td>
-                            <button class="btn btn-danger">Delete</button>
+                            <button
+                                class="btn btn-danger"
+                                v-on:click="deleteAddress(address)"
+                            >
+                                Delete
+                            </button>
                         </td>
                     </tr>
                 </tbody>
@@ -76,6 +81,11 @@ export default {
         getAddresses() {
             axios.get('/api/addresses').then((res) => {
                 this.addresses = res.data;
+            });
+        },
+        deleteAddress(address) {
+            axios.delete('/api/addresses/' + address.id).then((res) => {
+                this.getAddresses();
             });
         },
         //ModalMethods
