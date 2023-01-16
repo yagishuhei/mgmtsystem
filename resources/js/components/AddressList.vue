@@ -2,7 +2,6 @@
     <div class="container">
         <Modal
             :address="address"
-            :showModal="showModal"
             v-show="showModal"
             v-on:from-child="closeModal"
             v-on:update-address="updatePage"
