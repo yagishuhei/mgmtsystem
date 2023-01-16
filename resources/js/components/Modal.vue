@@ -69,6 +69,7 @@ export default {
     props: {
         address: 'address',
     },
+
     data: function () {
         return {
             address: [],
@@ -124,13 +125,15 @@ export default {
     background: #fff;
 }
 /*表示時*/
-.fade-enter-from {
+.fade-enter {
     opacity: 0;
 }
 /*表示のアクティブ状態*/
-.fade-enter-active,
+.fade-enter-active {
+    transition: all 1s;
+}
 .fade-leave-active {
-    transition: all 0.5s;
+    transition: all 1s;
 }
 /*表示終了時*/
 .fade-enter-to {
