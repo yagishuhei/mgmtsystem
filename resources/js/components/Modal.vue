@@ -3,7 +3,14 @@
         <div id="overlay" @click="clickEvent">
             <div id="modal" @click="stopEvent">
                 <p>モーダル</p>
-                <p>{{ message }}</p>
+
+                <transition name="fade">
+                    <div class="errorMessage" v-if="show">
+                        <ul v-for="error in errors" :key="error.id" class="row">
+                            <li>{{ error[0] }}</li>
+                        </ul>
+                    </div>
+                </transition>
                 <form v-on:submit.prevent="addFormData(address)">
                     <p>{{ address.id }}</p>
                     <label>address</label>
@@ -23,12 +30,6 @@
                         type="text"
                         class="form-control"
                         v-model="address.customer"
-                    />
-                    <label>dm_id</label>
-                    <input
-                        type="text"
-                        class="form-control"
-                        v-model="address.dm_id"
                     />
                     <label>place</label>
                     <input
@@ -54,7 +55,11 @@
                         class="form-control"
                         v-model="address.status"
                     />
-                    <button type="submit" class="btn btn-sm btn-success">
+                    <button
+                        type="submit"
+                        @click="errorMessage"
+                        class="btn btn-sm btn-success"
+                    >
                         Click
                     </button>
                 </form>
@@ -67,13 +72,14 @@
 export default {
     name: 'Modal',
     props: {
-        address: 'address',
+        address: { type: String },
     },
 
     data: function () {
         return {
             address: [],
-            message: '',
+            errors: [],
+            show: false,
         };
     },
     methods: {
@@ -89,14 +95,21 @@ export default {
                 axios
                     .put('/api/addresses/' + address.id, this.address)
                     .then((res) => {
-                        this.message = '成功しました！';
+                        this.$emit('update-address');
+                    })
+                    .catch((error) => {
+                        this.errors = error.response.data.errors;
                     });
             } else {
-                axios.post('/api/addresses', this.address).then((res) => {
-                    this.message = '成功しました！';
-                });
+                axios
+                    .post('/api/addresses', this.address)
+                    .then((res) => {
+                        this.$emit('update-address');
+                    })
+                    .catch((error) => {
+                        this.errors = error.response.data.errors;
+                    });
             }
-            this.$emit('update-address');
         },
     },
 };

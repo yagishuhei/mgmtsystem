@@ -5323,26 +5323,38 @@ __webpack_require__.r(__webpack_exports__);
     return {
       addresses: [],
       //modal
-      showModal: false
+      showModal: false,
+      address: ''
     };
   },
   methods: {
-    getAddress: function getAddress() {
+    getAddresses: function getAddresses() {
       var _this = this;
       axios.get('/api/addresses').then(function (res) {
         _this.addresses = res.data;
       });
     },
+    deleteAddress: function deleteAddress(address) {
+      var _this2 = this;
+      axios["delete"]('/api/addresses/' + address.id).then(function (res) {
+        _this2.getAddresses();
+      });
+    },
     //ModalMethods
-    openModal: function openModal() {
+    openModal: function openModal(address) {
       this.showModal = true;
+      this.address = address;
     },
     closeModal: function closeModal() {
+      this.showModal = false;
+    },
+    updatePage: function updatePage() {
+      this.getAddresses();
       this.showModal = false;
     }
   },
   mounted: function mounted() {
-    this.getAddress();
+    this.getAddresses();
   }
 });
 
@@ -5360,12 +5372,42 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: 'Modal',
+  props: {
+    address: {
+      type: String
+    }
+  },
+  data: function data() {
+    return {
+      address: [],
+      errors: [],
+      show: false
+    };
+  },
   methods: {
     clickEvent: function clickEvent() {
       this.$emit('from-child');
     },
     stopEvent: function stopEvent() {
       event.stopPropagation();
+    },
+    addFormData: function addFormData(address) {
+      var _this = this;
+      this.address.id = address.id;
+      if (address.id) {
+        axios.put('/api/addresses/' + address.id, this.address).then(function (res) {
+          _this.$emit('update-address');
+        })["catch"](function (error) {
+          _this.errors = error.response.data.errors;
+        });
+      } else {
+        axios.post('/api/addresses', this.address).then(function (res) {
+          _this.$emit('update-address');
+        })["catch"](function (error) {
+          _this.errors = error.response.data.errors;
+        });
+      }
     }
   }
 });
@@ -5396,10 +5438,14 @@ var render = function render() {
       value: _vm.showModal,
       expression: "showModal"
     }],
+    attrs: {
+      address: _vm.address
+    },
     on: {
-      "from-child": _vm.closeModal
+      "from-child": _vm.closeModal,
+      "update-address": _vm.updatePage
     }
-  }, [_vm._v("iiiiiiii")]), _vm._v(" "), _c("div", {
+  }), _vm._v(" "), _c("div", {
     staticClass: "card"
   }, [_c("h1", [_vm._v("AddressList")]), _vm._v(" "), _c("div", [_c("button", {
     staticClass: "btn btn-primary",
@@ -5416,9 +5462,18 @@ var render = function render() {
     }, [_vm._v(_vm._s(address.id))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(address.address))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(address.ip))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(address.dm_id))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(address.customer))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(address.place))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(address.purpose))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(address.memo))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(address.status))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(address.created_at))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(address.updated_at))]), _vm._v(" "), _c("td", [_c("button", {
       staticClass: "btn btn-success",
       on: {
-        click: _vm.openModal
+        click: function click($event) {
+          return _vm.openModal(address);
+        }
       }
-    }, [_vm._v("\n                            Edit\n                        ")])]), _vm._v(" "), _vm._m(1, true)]);
+    }, [_vm._v("\n                            Edit\n                        ")])]), _vm._v(" "), _c("td", [_c("button", {
+      staticClass: "btn btn-danger",
+      on: {
+        click: function click($event) {
+          return _vm.deleteAddress(address);
+        }
+      }
+    }, [_vm._v("\n                            Delete\n                        ")])])]);
   }), 0)])])], 1);
 };
 var staticRenderFns = [function () {
@@ -5469,12 +5524,6 @@ var staticRenderFns = [function () {
       scope: "col"
     }
   }, [_vm._v("更新日")])])]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("td", [_c("button", {
-    staticClass: "btn btn-danger"
-  }, [_vm._v("Delete")])]);
 }];
 render._withStripped = true;
 
@@ -5496,7 +5545,12 @@ __webpack_require__.r(__webpack_exports__);
 var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
-  return _c("div", {
+  return _c("transition", {
+    attrs: {
+      name: "fade",
+      appear: ""
+    }
+  }, [_c("div", {
     attrs: {
       id: "overlay"
     },
@@ -5510,11 +5564,177 @@ var render = function render() {
     on: {
       click: _vm.stopEvent
     }
-  }, [_c("p", [_vm._t("default")], 2), _vm._v(" "), _c("p", [_vm._v("モーダル")]), _vm._v(" "), _c("p", {
+  }, [_c("p", [_vm._v("モーダル")]), _vm._v(" "), _c("transition", {
+    attrs: {
+      name: "fade"
+    }
+  }, [_vm.show ? _c("div", {
+    staticClass: "errorMessage"
+  }, _vm._l(_vm.errors, function (error) {
+    return _c("ul", {
+      key: error.id,
+      staticClass: "row"
+    }, [_c("li", [_vm._v(_vm._s(error[0]))])]);
+  }), 0) : _vm._e()]), _vm._v(" "), _c("form", {
+    on: {
+      submit: function submit($event) {
+        $event.preventDefault();
+        return _vm.addFormData(_vm.address);
+      }
+    }
+  }, [_c("p", [_vm._v(_vm._s(_vm.address.id))]), _vm._v(" "), _c("label", [_vm._v("address")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.address.address,
+      expression: "address.address"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text"
+    },
+    domProps: {
+      value: _vm.address.address
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.address, "address", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _c("label", [_vm._v("ip")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.address.ip,
+      expression: "address.ip"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text"
+    },
+    domProps: {
+      value: _vm.address.ip
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.address, "ip", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _c("label", [_vm._v("customer")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.address.customer,
+      expression: "address.customer"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text"
+    },
+    domProps: {
+      value: _vm.address.customer
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.address, "customer", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _c("label", [_vm._v("place")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.address.place,
+      expression: "address.place"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text"
+    },
+    domProps: {
+      value: _vm.address.place
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.address, "place", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _c("label", [_vm._v("purpose")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.address.purpose,
+      expression: "address.purpose"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text"
+    },
+    domProps: {
+      value: _vm.address.purpose
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.address, "purpose", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _c("label", [_vm._v("memo")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.address.memo,
+      expression: "address.memo"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text"
+    },
+    domProps: {
+      value: _vm.address.memo
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.address, "memo", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _c("label", [_vm._v("staus")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.address.status,
+      expression: "address.status"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text"
+    },
+    domProps: {
+      value: _vm.address.status
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.address, "status", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _c("button", {
+    staticClass: "btn btn-sm btn-success",
+    attrs: {
+      type: "submit"
+    },
+    on: {
+      click: _vm.errorMessage
+    }
+  }, [_vm._v("\n                    Click\n                ")])]), _vm._v(" "), _c("p", {
     on: {
       click: _vm.clickEvent
     }
-  }, [_vm._v("X")])])]);
+  }, [_vm._v("X")])], 1)])]);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -5542,7 +5762,7 @@ vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(vue_router__WEBPACK_IMPORTED_MOD
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]({
   mode: 'history',
   routes: [{
-    path: '/',
+    path: '/addresses',
     name: 'address.list',
     component: _components_AddressList_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   }]
@@ -10840,7 +11060,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n#overlay {\n    /*要素の順番*/\n    z-index: 1;\n    /*画面全体を覆う設定*/\n    position: fixed;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    background-color: rgba(0, 0, 0, 0.6);\n    /*画面中央に配置*/\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n#modal {\n    z-index: 2;\n    width: 50%;\n    padding: 1em;\n    background: #fff;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n#overlay {\n    /*要素の順番*/\n    z-index: 1;\n    /*画面全体を覆う設定*/\n    position: fixed;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    background-color: rgba(0, 0, 0, 0.6);\n    /*画面中央に配置*/\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n#modal {\n    z-index: 2;\n    width: 50%;\n    padding: 1em;\n    background: #fff;\n}\n/*表示時*/\n.fade-enter {\n    opacity: 0;\n}\n/*表示のアクティブ状態*/\n.fade-enter-active {\n    transition: all 1s;\n}\n.fade-leave-active {\n    transition: all 1s;\n}\n/*表示終了時*/\n.fade-enter-to {\n    opacity: 1;\n}\n/*非表示時*/\n.fade-leave-from {\n    opacity: 1;\n}\n/*非表示の終了時*/\n.fade-leave-to {\n    opacity: 0;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

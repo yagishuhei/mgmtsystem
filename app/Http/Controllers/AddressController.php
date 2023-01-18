@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AddressController extends Controller
 {
@@ -13,7 +14,16 @@ class AddressController extends Controller
     }
     public function store(Request $request)
     {
-        return Address::create($request->all());
+        $validated = $request->validateWithBag('post', [
+            'address' => ['required'],
+            'ip' => ['required'],
+            'customer' => ['required'],
+            'place' => ['required'],
+            'purpose' => ['required'],
+            'status' => ['required'],
+        ]);
+        Log::info($validated);
+        return Address::create($validated);
     }
     public function show(Address $address)
     {
