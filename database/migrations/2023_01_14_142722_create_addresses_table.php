@@ -17,7 +17,6 @@ class CreateAddressesTable extends Migration
             $table->id();
             $table->string('address');
             $table->string('ip')->default('0.0.0.0');
-            $table->integer('dm_id');
             $table->string('customer');
             $table->string('place');
             $table->string('purpose');
