@@ -16,6 +16,7 @@ class CreateAddressesTable extends Migration
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
             $table->string('address');
+            $table->integer('user_id');
             $table->string('ip')->default('0.0.0.0');
             $table->string('customer');
             $table->string('place');

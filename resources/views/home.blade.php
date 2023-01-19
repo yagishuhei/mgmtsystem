@@ -3,7 +3,8 @@
 @section('content')
 <div class="container">
     <div id="app">
-    <address-list/>
+        <router-view />
+
     </div>
 </div>
 @endsection
