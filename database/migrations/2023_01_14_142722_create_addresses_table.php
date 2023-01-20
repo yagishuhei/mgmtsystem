@@ -17,10 +17,6 @@ class CreateAddressesTable extends Migration
             $table->id();
             $table->string('address');
             $table->integer('user_id');
-            $table->string('ip')->default('0.0.0.0');
-            $table->string('customer');
-            $table->string('place');
-            $table->string('purpose');
             $table->string('memo');
             $table
                 ->enum('status', ['active', 'secure', 'unused'])
