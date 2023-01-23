@@ -8,7 +8,6 @@ import UserList from './components/UserList.vue';
 
 window.Vue = require('vue').default;
 Vue.use(VueRouter);
-Vue.component('address-list', AddressList);
 
 const router = new VueRouter ({
     mode: 'history',
@@ -17,6 +16,12 @@ const router = new VueRouter ({
             path: '/addresses',
             name: 'address.list',
             component: AddressList,
+        },
+        {
+            path: '/users',
+            name: 'user.list',
+            component: UserList,
+
         }
     ]
 });
