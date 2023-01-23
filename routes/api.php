@@ -18,6 +18,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request;
 });
 
+Route::get('/users', [App\Http\Controllers\UserController::class, 'index']);
+Route::get('/users/search', [
+    App\Http\Controllers\UserController::class,
+    'search',
+]);
+
 Route::middleware('auth:sanctum')->get('/users', [
     App\Http\Controllers\UserController::class,
     'index',
