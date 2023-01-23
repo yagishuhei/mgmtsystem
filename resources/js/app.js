@@ -9,7 +9,6 @@ import UserList from './components/UserList.vue';
 window.Vue = require('vue').default;
 Vue.use(VueRouter);
 
-
 const router = new VueRouter ({
     mode: 'history',
     routes: [
