@@ -1,5 +1,57 @@
 <template>
     <div class="container">
+        <div class="login">
+            <div class="card">
+                <div class="card-header">ログイン</div>
+
+                <div class="card-body">
+                    <form v-on:submit.prevent="submit(email, password)">
+                        <div class="row mb-3">
+                            <label
+                                for="email"
+                                class="col-md-4 col-form-label text-md-end"
+                                >メールアドレス</label
+                            >
+
+                            <div class="col-md-6">
+                                <input
+                                    id="email"
+                                    type="email"
+                                    class="form-control"
+                                    name="email"
+                                    v-model="email"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label
+                                for="password"
+                                class="col-md-4 col-form-label text-md-end"
+                                >パスワード</label
+                            >
+
+                            <div class="col-md-6">
+                                <input
+                                    id="password"
+                                    type="password"
+                                    class="form-control"
+                                    name="password"
+                                    v-model="password"
+                                />
+                            </div>
+                        </div>
+                        <div class="row mb-0">
+                            <div class="col-md-8 offset-md-4">
+                                <button type="submit" class="btn btn-primary">
+                                    Login
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <Modal
             :address="address"
             v-show="showModal"
@@ -75,6 +127,7 @@ export default {
             //modal
             showModal: false,
             address: '',
+            users: {},
         };
     },
     methods: {
@@ -100,9 +153,17 @@ export default {
             this.getAddresses();
             this.showModal = false;
         },
+        submit(email, password) {
+            axios.get('/sanctum/csrf-cookie').then((res) => {
+                axios.post('/api/login', { email, password }).then((res) => {
+                    console.log(res);
+                });
+            });
+        },
     },
     mounted() {
         this.getAddresses();
+        axios.get('/sanctum/csrf-cookie');
     },
 };
 </script>

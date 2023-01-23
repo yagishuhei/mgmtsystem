@@ -21,7 +21,6 @@ const router = new VueRouter ({
             path: '/users',
             name: 'user.list',
             component: UserList,
-
         }
     ]
 });

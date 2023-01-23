@@ -5324,7 +5324,8 @@ __webpack_require__.r(__webpack_exports__);
       addresses: [],
       //modal
       showModal: false,
-      address: ''
+      address: '',
+      users: {}
     };
   },
   methods: {
@@ -5351,10 +5352,21 @@ __webpack_require__.r(__webpack_exports__);
     updatePage: function updatePage() {
       this.getAddresses();
       this.showModal = false;
+    },
+    submit: function submit(email, password) {
+      axios.get('/sanctum/csrf-cookie').then(function (res) {
+        axios.post('/api/login', {
+          email: email,
+          password: password
+        }).then(function (res) {
+          console.log(res);
+        });
+      });
     }
   },
   mounted: function mounted() {
     this.getAddresses();
+    axios.get('/sanctum/csrf-cookie');
   }
 });
 
@@ -5463,7 +5475,84 @@ var render = function render() {
     _c = _vm._self._c;
   return _c("div", {
     staticClass: "container"
-  }, [_c("Modal", {
+  }, [_c("div", {
+    staticClass: "login"
+  }, [_c("div", {
+    staticClass: "card"
+  }, [_c("div", {
+    staticClass: "card-header"
+  }, [_vm._v("ログイン")]), _vm._v(" "), _c("div", {
+    staticClass: "card-body"
+  }, [_c("form", {
+    on: {
+      submit: function submit($event) {
+        $event.preventDefault();
+        return _vm.submit(_vm.email, _vm.password);
+      }
+    }
+  }, [_c("div", {
+    staticClass: "row mb-3"
+  }, [_c("label", {
+    staticClass: "col-md-4 col-form-label text-md-end",
+    attrs: {
+      "for": "email"
+    }
+  }, [_vm._v("メールアドレス")]), _vm._v(" "), _c("div", {
+    staticClass: "col-md-6"
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.email,
+      expression: "email"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      id: "email",
+      type: "email",
+      name: "email"
+    },
+    domProps: {
+      value: _vm.email
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.email = $event.target.value;
+      }
+    }
+  })])]), _vm._v(" "), _c("div", {
+    staticClass: "row mb-3"
+  }, [_c("label", {
+    staticClass: "col-md-4 col-form-label text-md-end",
+    attrs: {
+      "for": "password"
+    }
+  }, [_vm._v("パスワード")]), _vm._v(" "), _c("div", {
+    staticClass: "col-md-6"
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.password,
+      expression: "password"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      id: "password",
+      type: "password",
+      name: "password"
+    },
+    domProps: {
+      value: _vm.password
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.password = $event.target.value;
+      }
+    }
+  })])]), _vm._v(" "), _vm._m(0)])])])]), _vm._v(" "), _c("Modal", {
     directives: [{
       name: "show",
       rawName: "v-show",
@@ -5484,7 +5573,7 @@ var render = function render() {
     on: {
       click: _vm.openModal
     }
-  }, [_vm._v("追加")])]), _vm._v(" "), _c("table", [_vm._m(0), _vm._v(" "), _c("tbody", _vm._l(_vm.addresses, function (address, index) {
+  }, [_vm._v("追加")])]), _vm._v(" "), _c("table", [_vm._m(1), _vm._v(" "), _c("tbody", _vm._l(_vm.addresses, function (address, index) {
     return _c("tr", {
       key: index
     }, [_c("th", {
@@ -5509,6 +5598,19 @@ var render = function render() {
   }), 0)])])], 1);
 };
 var staticRenderFns = [function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "row mb-0"
+  }, [_c("div", {
+    staticClass: "col-md-8 offset-md-4"
+  }, [_c("button", {
+    staticClass: "btn btn-primary",
+    attrs: {
+      type: "submit"
+    }
+  }, [_vm._v("\n                                Login\n                            ")])])]);
+}, function () {
   var _vm = this,
     _c = _vm._self._c;
   return _c("thead", [_c("tr", [_c("th", {
@@ -5824,13 +5926,16 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = (__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_2__["default"].use(vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]);
-vue__WEBPACK_IMPORTED_MODULE_2__["default"].component('address-list', _components_AddressList_vue__WEBPACK_IMPORTED_MODULE_0__["default"]);
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
   mode: 'history',
   routes: [{
     path: '/addresses',
     name: 'address.list',
     component: _components_AddressList_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+  }, {
+    path: '/users',
+    name: 'user.list',
+    component: _components_UserList_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   }]
 });
 var app = new vue__WEBPACK_IMPORTED_MODULE_2__["default"]({
