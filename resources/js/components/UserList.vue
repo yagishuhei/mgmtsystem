@@ -32,7 +32,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="user in users" :key="user.id">
+                    <tr v-for="user in filteredUsers" :key="user.id">
                         <td>{{ user.id }}</td>
                         <td>{{ user.name }}</td>
                         <td>{{ user.email }}</td>
@@ -53,13 +53,32 @@ export default {
             keyword: '',
         };
     },
+    //リアクティブな検索機能
+    computed: {
+        filteredUsers: function () {
+            var users = [];
+
+            for (var i in this.users) {
+                var user = this.users[i];
+
+                if (
+                    user.name.indexOf(this.keyword) !== -1 ||
+                    user.email.indexOf(this.keyword) !== -1
+                ) {
+                    users.push(user);
+                }
+            }
+
+            return users;
+        },
+    },
     methods: {
         getUsers() {
             axios.get('/api/users').then((res) => {
                 this.users = res.data;
             });
         },
-        userSearch() {
+        /*userSearch() {
             axios
                 .get('/api/users/search', { params: { keyword: this.keyword } })
                 .then((response) => {
@@ -68,7 +87,7 @@ export default {
                 .catch((error) => {
                     console.log(error);
                 });
-        },
+        },*/
     },
     mounted() {
         this.getUsers();
