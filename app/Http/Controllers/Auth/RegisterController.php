@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Password;
 //登録後管理者のままで元の画面にリダイレクト
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class RegisterController extends Controller
 {
@@ -55,6 +57,8 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+        $id = Auth::user()->id;
+        Log::info($id);
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => [
